@@ -70,7 +70,7 @@ app.get("/welcome", async (req, res) => {
     // ===== LOGO =====
     ctx.fillStyle = "#8DDC65";
     ctx.font = "bold 58px Sans";
-    ctx.fillText("🦫 CAPY SHOP", 340, 110);
+    ctx.fillText("CAPY SHOP", 340, 110);
 
     // ===== WELCOME =====
     ctx.fillStyle = "#ffffff";
@@ -103,7 +103,7 @@ app.get("/welcome", async (req, res) => {
     );
 
     ctx.fillText(
-      "Nhanh chong • Uy tin • Chuyen nghiep",
+      "Nhanh Chóng • Uy tín • Chuyên Nghiệp • Thân Thiện",
       340,
       430
     );
@@ -112,7 +112,7 @@ app.get("/welcome", async (req, res) => {
     ctx.fillStyle = "#8DDC65";
     ctx.font = "20px Sans";
     ctx.fillText(
-      "Powered by Capy Shop",
+      "Created by Capy Shop",
       50,
       485
     );
