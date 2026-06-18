@@ -23,7 +23,7 @@ app.get("/welcome", async (req, res) => {
 
     // ===== CAPYBARA BACKGROUND =====
     const background = await Canvas.loadImage(
-      "https://cdn.discordapp.com/attachments/1344720407953150004/1516826123273769050/4VnTvTyyb65ft28t6TszhEqYAzGHAi6OIi3SggSx.jpg?ex=6a340de9&is=6a32bc69&hm=9ea97cb8f4757677cadb67074c867c51d8d181b50925b7bc09c953371c8f5f84&"
+      " https://cdn.discordapp.com/attachments/1344720407953150004/1516849661363752970/Capy_20260605_232214_0000.png?ex=6a34cc94&is=6a337b14&hm=3c733a910c166a7b829daf1a1c263c982348b3112d0de15abe42e5fceb498f8b&"
     );
 
     ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
