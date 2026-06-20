@@ -24,7 +24,7 @@ app.get("/welcome", async (req, res) => {
     // ===== BACKGROUND =====
     try {
       const background = await Canvas.loadImage(
-        "https://images.unsplash.com/photo-1517849845537-4d257902454a?w=1200&q=80"
+        "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/43a44951-8866-4a53-bf09-a27850e06061/dgwrkew-416b5222-1a6f-4e61-9134-00fa6d378d89.png/v1/fill/w_1192,h_670,q_70,strp/capybara_wallpaper_by_mangoarrow_dgwrkew-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NzIwIiwicGF0aCI6Ii9mLzQzYTQ0OTUxLTg4NjYtNGE1My1iZjA5LWEyNzg1MGUwNjA2MS9kZ3dya2V3LTQxNmI1MjIyLTFhNmYtNGU2MS05MTM0LTAwZmE2ZDM3OGQ4OS5wbmciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.YV09pxWbRAptga092z_oBwT0QgifMwp6Lyhq5cRhOik"
       );
 
       ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
