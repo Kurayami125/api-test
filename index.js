@@ -23,7 +23,7 @@ app.get("/welcome", async (req, res) => {
 
     // ===== CAPYBARA BACKGROUND =====
     const background = await Canvas.loadImage(
-      "https://cdn.discordapp.com/attachments/1344720407953150004/1516849661363752970/Capy_20260605_232214_0000.png?ex=6a361e14&is=6a34cc94&hm=0ca6b163bde05a62445c9a6bafc195dfaf4eb7aec4575f3ab3fbdbca4b2d6877&"
+      "https://www.canva.com/templates/EAGxJmQfeTk-brown-and-blue-cute-illustrative-watercolor-linktree-background/"
     );
 
     ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
