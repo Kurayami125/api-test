@@ -16,7 +16,7 @@ app.get("/welcome", async (req, res) => {
     }
 
     const username = decodeURIComponent(req.query.username || "Member");
-    const count = Number(req.query.count || 0) + 1;
+    const count = Number(req.query.count || 0);
 
     const canvas = Canvas.createCanvas(1200, 500);
     const ctx = canvas.getContext("2d");
