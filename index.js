@@ -3,7 +3,6 @@ const Canvas = require("@napi-rs/canvas");
 
 const app = express();
 
-// ===== BO GÓC CARD =====
 function roundRect(ctx, x, y, width, height, radius) {
   ctx.beginPath();
   ctx.moveTo(x + radius, y);
@@ -18,15 +17,13 @@ function roundRect(ctx, x, y, width, height, radius) {
   ctx.closePath();
 }
 
-// ===== AUTO FONT =====
 function applyText(canvas, text, maxWidth, startSize) {
   const ctx = canvas.getContext("2d");
-  let size = startSize;
+  let fontSize = startSize;
 
   do {
-    ctx.font = `bold ${size}px Sans`;
-    size--;
-  } while (ctx.measureText(text).width > maxWidth && size > 20);
+    ctx.font = `bold ${fontSize -= 2}px Sans`;
+  } while (ctx.measureText(text).width > maxWidth);
 
   return ctx.font;
 }
@@ -40,82 +37,71 @@ app.get("/welcome", async (req, res) => {
 
     const avatarURL = req.query.avatar;
 
-    if (!avatarURL) {
+    if (!avatarURL)
       return res.status(400).send("Missing avatar parameter");
-    }
 
     const username = decodeURIComponent(req.query.username || "Member");
     const count = req.query.count || "0";
 
     const canvas = Canvas.createCanvas(1200, 500);
     const ctx = canvas.getContext("2d");
-
     // ===== BACKGROUND =====
     try {
-
       const background = await Canvas.loadImage(
         "https://media.craiyon.com/2025-10-17/z060eYsOSY2hVXSoPImsyA.webp"
       );
 
-      ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+      ctx.drawImage(background, 0, 0, 1200, 500);
 
     } catch {
 
-      ctx.fillStyle = "#64584d";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      const gradient = ctx.createLinearGradient(0, 0, 1200, 500);
+      gradient.addColorStop(0, "#53473d");
+      gradient.addColorStop(1, "#7c6856");
+
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, 1200, 500);
 
     }
 
-    // Overlay
+    // overlay
     ctx.fillStyle = "rgba(0,0,0,0.45)";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillRect(0, 0, 1200, 500);
 
-    // ===== CARD =====
-
-    // Glow ngoài
+    // card
     ctx.shadowColor = "#8DDC65";
-    ctx.shadowBlur = 40;
+    ctx.shadowBlur = 25;
 
-    ctx.fillStyle = "rgba(20,20,20,0.88)";
+    ctx.fillStyle = "rgba(26,27,31,0.92)";
     roundRect(ctx, 40, 40, 1120, 420, 35);
     ctx.fill();
 
     ctx.shadowBlur = 0;
 
-    // Viền ngoài
-    ctx.lineWidth = 6;
+    ctx.lineWidth = 5;
     ctx.strokeStyle = "#8DDC65";
     roundRect(ctx, 40, 40, 1120, 420, 35);
     ctx.stroke();
 
-    // Viền trong
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = "rgba(255,255,255,0.15)";
-    roundRect(ctx, 50, 50, 1100, 400, 30);
-    ctx.stroke();
-
-    // ===== AVATAR =====
-
+    // avatar
     const avatar = await Canvas.loadImage(avatarURL);
 
-    // Glow avatar
     ctx.shadowColor = "#8DDC65";
-    ctx.shadowBlur = 60;
+    ctx.shadowBlur = 40;
 
     ctx.beginPath();
-    ctx.arc(180, 250, 125, 0, Math.PI * 2);
-    ctx.fillStyle = "rgba(141,220,101,0.20)";
+    ctx.arc(180, 250, 120, 0, Math.PI * 2);
+    ctx.fillStyle = "rgba(141,220,101,0.25)";
     ctx.fill();
 
     ctx.shadowBlur = 0;
 
-    // Viền trắng
+    // viền trắng
     ctx.beginPath();
-    ctx.arc(180, 250, 112, 0, Math.PI * 2);
-    ctx.fillStyle = "#FFFFFF";
+    ctx.arc(180, 250, 108, 0, Math.PI * 2);
+    ctx.fillStyle = "#ffffff";
     ctx.fill();
 
-    // Avatar tròn
     ctx.save();
 
     ctx.beginPath();
@@ -126,110 +112,89 @@ app.get("/welcome", async (req, res) => {
 
     ctx.restore();
 
-    // Viền xanh
+    // viền xanh
     ctx.beginPath();
     ctx.arc(180, 250, 105, 0, Math.PI * 2);
-    ctx.lineWidth = 5;
     ctx.strokeStyle = "#8DDC65";
+    ctx.lineWidth = 5;
     ctx.stroke();
+    // Capybara góc phải
+    try {
 
-    // Viền sáng ngoài
-    ctx.beginPath();
-    ctx.arc(180, 250, 115, 0, Math.PI * 2);
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = "rgba(255,255,255,0.3)";
-    ctx.stroke();
-// ===== TEXT =====
+      const capy = await Canvas.loadImage(
+        "https://i.postimg.cc/Fz188XgB/images-(2).jpg"
+      );
+
+      ctx.globalAlpha = 0.95;
+      ctx.drawImage(capy, 930, 55, 170, 170);
+      ctx.globalAlpha = 1;
+
+    } catch {}
 
     // CAPY SHOP
     ctx.shadowColor = "#8DDC65";
-    ctx.shadowBlur = 20;
-
-    ctx.fillStyle = "#8DDC65";
-    ctx.font = "bold 70px Sans";
-    ctx.fillText("CAPY SHOP", 340, 115);
-
-    ctx.shadowBlur = 0;
-
-    // WELCOME
-    ctx.shadowColor = "black";
     ctx.shadowBlur = 15;
 
-    ctx.fillStyle = "#FFFFFF";
-    ctx.font = "bold 66px Sans";
-    ctx.fillText("WELCOME!", 340, 190);
+    ctx.fillStyle = "#8DDC65";
+    ctx.font = "bold 60px Sans";
+    ctx.fillText("CAPY SHOP", 340, 110);
 
     ctx.shadowBlur = 0;
 
-    // USERNAME
-    ctx.fillStyle = "#FFFFFF";
-    ctx.font = applyText(canvas, username, 760, 54);
-    ctx.fillText(username, 340, 280);
+    // Welcome
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "bold 58px Sans";
+    ctx.fillText("WELCOME!", 340, 180);
 
-    // MEMBER COUNT
+    // Username
+    ctx.fillStyle = "#ffffff";
+    ctx.font = applyText(canvas, username, 600, 52);
+    ctx.fillText(username, 340, 255);
+
+    // Member
     ctx.fillStyle = "#8DDC65";
-    ctx.font = "bold 40px Sans";
-    ctx.fillText(`Member #${count}`, 340, 340);
+    ctx.font = "bold 38px Sans";
+    ctx.fillText(`Member #${count}`, 340, 315);
 
-    // ĐƯỜNG KẺ
-    ctx.strokeStyle = "rgba(255,255,255,0.15)";
-    ctx.lineWidth = 2;
-
-    ctx.beginPath();
-    ctx.moveTo(340, 360);
-    ctx.lineTo(1080, 360);
-    ctx.stroke();
-
-    // MÔ TẢ
-    ctx.fillStyle = "#FFFFFF";
-    ctx.font = "26px Sans";
+    // Nội dung
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "30px Sans";
 
     ctx.fillText(
       "Cảm ơn bạn đã tham gia cộng đồng CAPY SHOP!",
       340,
-      405
+      385
     );
 
-    ctx.fillStyle = "#D9D9D9";
-    ctx.font = "20px Sans";
+    ctx.font = "24px Sans";
 
     ctx.fillText(
       "Nhanh Chóng • Uy Tín • Chuyên Nghiệp • Thân Thiện",
       340,
-      440
+      430
     );
-// ===== FOOTER =====
+
+    // hạt sáng
+    for (let i = 0; i < 30; i++) {
+
+      ctx.beginPath();
+
+      ctx.arc(
+        Math.random() * 1200,
+        Math.random() * 500,
+        Math.random() * 2,
+        0,
+        Math.PI * 2
+      );
+
+      ctx.fillStyle = "rgba(255,255,255,0.35)";
+      ctx.fill();
+
+    }
 
     ctx.fillStyle = "#8DDC65";
-    ctx.font = "18px Sans";
-
-    ctx.fillText(
-      "Created by Capy Shop",
-      55,
-      485
-    );
-
-    // ===== DECORATION =====
-
-    ctx.fillStyle = "rgba(141,220,101,0.4)";
-
-    ctx.beginPath();
-    ctx.arc(1080, 100, 5, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.beginPath();
-    ctx.arc(1040, 130, 3, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.beginPath();
-    ctx.arc(1100, 150, 4, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.beginPath();
-    ctx.arc(980, 80, 2, 0, Math.PI * 2);
-    ctx.fill();
-
-    // ===== OUTPUT =====
+    ctx.font = "22px Sans";
+    ctx.fillText("Created by Capy Shop", 55, 485);
 
     const buffer = canvas.toBuffer("image/png");
 
@@ -239,18 +204,13 @@ app.get("/welcome", async (req, res) => {
   } catch (err) {
 
     console.error(err);
-
     res.status(500).send(err.toString());
 
   }
 });
 
-// ===== SERVER =====
-
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-
-  console.log(`🦫 Server running on port ${PORT}`);
-
-}); 
+  console.log("🦫 Server running on port " + PORT);
+});
